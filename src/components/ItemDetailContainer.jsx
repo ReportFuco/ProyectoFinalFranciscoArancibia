@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ItemCount from './ItemCount'; // Componente para controlar la cantidad
+import ItemCount from './ItemCount';
 
-// Simulación de datos de productos
+
 const productosMock = [
   { id: '1', nombre: 'Producto 1', descripcion: 'Descripción del producto 1', stock: 10 },
   { id: '2', nombre: 'Producto 2', descripcion: 'Descripción del producto 2', stock: 5 },

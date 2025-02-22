@@ -4,7 +4,7 @@ body {
   background-color: #f5f5f5;
 }
 
-/* Barra de navegación */
+
 nav {
   background-color: #181818;
   padding: 10px 20px;
@@ -28,18 +28,18 @@ nav ul li a:hover {
   text-decoration: underline;
 }
 
-/* Contenedor principal */
+
 .container {
   padding: 20px;
 }
 
-/* Títulos */
+
 h1 {
   color: #333;
   margin-bottom: 20px;
 }
 
-/* Listados de productos */
+
 ul {
   list-style: none;
   padding: 0;
@@ -57,7 +57,7 @@ ul li:hover {
   transform: scale(1.02);
 }
 
-/* Vista de detalle del producto */
+
 .item-detail {
   background-color: #fff;
   padding: 20px;
@@ -68,7 +68,7 @@ ul li:hover {
   margin: 10px 0;
 }
 
-/* Botones y contador */
+
 button {
   background-color: #333;
   color: white;
@@ -93,7 +93,7 @@ button:hover {
   margin: 0 5px;
 }
 
-/* Página 404 */
+
 .not-found {
   text-align: center;
   margin-top: 50px;
