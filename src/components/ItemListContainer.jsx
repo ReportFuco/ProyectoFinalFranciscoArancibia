@@ -9,7 +9,6 @@ const productosMock = [
   { id: '4', nombre: 'producto 4', categoria: 'A' },
 ];
 
-// Función que simula una llamada asíncrona a una API
 const fetchProducts = (categoria) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -18,7 +17,7 @@ const fetchProducts = (categoria) => {
       } else {
         resolve(productosMock);
       }
-    }, 1000); // Simula un retardo de 1 segundo
+    }, 1000);
   });
 };
 
@@ -40,7 +39,6 @@ function ItemListContainer() {
       <ul>
         {productos.map(prod => (
           <li key={prod.id}>
-            {/* Enlace al detalle del producto */}
             <Link to={`/item/${prod.id}`}>{prod.nombre}</Link>
           </li>
         ))}
