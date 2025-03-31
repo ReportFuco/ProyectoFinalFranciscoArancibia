@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 function CheckoutForm() {
   const { cart } = useCart();
@@ -8,7 +10,6 @@ function CheckoutForm() {
     email: "",
     telefono: "",
   });
-
   const [orderId, setOrderId] = useState(null);
 
   const handleChange = (e) => {
@@ -18,10 +19,9 @@ function CheckoutForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simulamos generar orden
     const order = {
       cliente: formData,
       productos: cart,
@@ -32,11 +32,12 @@ function CheckoutForm() {
       fecha: new Date(),
     };
 
-    console.log("Orden generada:", order);
-
-    // Simulamos ID de orden
-    const generatedId = Math.random().toString(36).substr(2, 9);
-    setOrderId(generatedId);
+    try {
+      const docRef = await addDoc(collection(db, "orders"), order);
+      setOrderId(docRef.id);
+    } catch (error) {
+      console.error("Error al guardar la orden:", error);
+    }
   };
 
   if (orderId) {
