@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import ItemList from "./ItemList";
 
 const productosMock = [
-  { id: '1', nombre: 'Producto 1', categoria: 'A' },
-  { id: '2', nombre: 'Producto 2', categoria: 'B' },
-  { id: '3', nombre: 'Producto 3', categoria: 'A' },
-  { id: '4', nombre: 'producto 4', categoria: 'A' },
+  { id: "1", nombre: "Producto 1", categoria: "A" },
+  { id: "2", nombre: "Producto 2", categoria: "B" },
+  { id: "3", nombre: "Producto 3", categoria: "A" },
+  { id: "4", nombre: "producto 4", categoria: "A" },
 ];
 
 const fetchProducts = (categoria) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       if (categoria) {
-        resolve(productosMock.filter(prod => prod.categoria === categoria));
+        resolve(productosMock.filter((prod) => prod.categoria === categoria));
       } else {
         resolve(productosMock);
       }
@@ -26,23 +26,15 @@ function ItemListContainer() {
   const { categoryId } = useParams();
 
   useEffect(() => {
-    fetchProducts(categoryId).then(data => {
+    fetchProducts(categoryId).then((data) => {
       setProductos(data);
     });
   }, [categoryId]);
 
   return (
     <div>
-      <h1>
-        Catálogo de Productos {categoryId && `- Categoría ${categoryId}`}
-      </h1>
-      <ul>
-        {productos.map(prod => (
-          <li key={prod.id}>
-            <Link to={`/item/${prod.id}`}>{prod.nombre}</Link>
-          </li>
-        ))}
-      </ul>
+      <h1>Catálogo de Productos {categoryId && `- Categoría ${categoryId}`}</h1>
+      <ItemList productos={productos} />
     </div>
   );
 }
