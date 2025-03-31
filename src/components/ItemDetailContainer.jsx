@@ -2,40 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ItemCount from "./ItemCount";
 import { useCart } from "../context/CartContext";
-
-const productosMock = [
-  {
-    id: "1",
-    nombre: "Producto 1",
-    descripcion: "Descripción del producto 1",
-    stock: 10,
-  },
-  {
-    id: "2",
-    nombre: "Producto 2",
-    descripcion: "Descripción del producto 2",
-    stock: 5,
-  },
-  {
-    id: "3",
-    nombre: "Producto 3",
-    descripcion: "Descripción del producto 3",
-    stock: 8,
-  },
-];
-
-const fetchProduct = (id) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const producto = productosMock.find((prod) => prod.id === id);
-      if (producto) {
-        resolve(producto);
-      } else {
-        reject("Producto no encontrado");
-      }
-    }, 1000);
-  });
-};
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 function ItemDetailContainer() {
   const [producto, setProducto] = useState(null);
@@ -45,12 +13,18 @@ function ItemDetailContainer() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    fetchProduct(id)
-      .then((data) => {
-        setProducto(data);
-        setAddedToCart(false);
+    const docRef = doc(db, "productos", id);
+
+    getDoc(docRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          setProducto({ id: docSnap.id, ...docSnap.data() });
+          setAddedToCart(false);
+        } else {
+          setError("Producto no encontrado");
+        }
       })
-      .catch((err) => setError(err));
+      .catch((err) => setError(err.message));
   }, [id]);
 
   const handleAdd = (count) => {
@@ -65,6 +39,7 @@ function ItemDetailContainer() {
     <div>
       <h1>{producto.nombre}</h1>
       <p>{producto.descripcion}</p>
+      <p>Precio: ${producto.precio}</p>
       <p>Stock: {producto.stock}</p>
 
       {!addedToCart ? (

@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ItemList from "./ItemList";
-
-const productosMock = [
-  { id: "1", nombre: "Producto 1", categoria: "A" },
-  { id: "2", nombre: "Producto 2", categoria: "B" },
-  { id: "3", nombre: "Producto 3", categoria: "A" },
-  { id: "4", nombre: "producto 4", categoria: "A" },
-];
-
-const fetchProducts = (categoria) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (categoria) {
-        resolve(productosMock.filter((prod) => prod.categoria === categoria));
-      } else {
-        resolve(productosMock);
-      }
-    }, 1000);
-  });
-};
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 function ItemListContainer() {
   const [productos, setProductos] = useState([]);
   const { categoryId } = useParams();
 
   useEffect(() => {
-    fetchProducts(categoryId).then((data) => {
-      setProductos(data);
-    });
+    const productosRef = collection(db, "productos");
+
+    const q = categoryId
+      ? query(productosRef, where("categoria", "==", categoryId))
+      : productosRef;
+
+    getDocs(q)
+      .then((snapshot) => {
+        const docs = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProductos(docs);
+      })
+      .catch((error) => {
+        console.error("Error al traer los productos:", error);
+      });
   }, [categoryId]);
 
   return (
